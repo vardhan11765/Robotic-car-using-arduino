@@ -1,0 +1,36 @@
+#include <Servo.h>
+
+Servo toll;
+float time;
+float distance;
+void setup()
+{
+  pinMode(8,INPUT);
+  pinMode(7,OUTPUT);
+  Serial.begin(9600);
+  toll.attach(9);
+  toll.write(0);
+}
+
+void loop()
+{
+  digitalWrite(7,0);
+  delayMicroseconds(2);
+  digitalWrite(7,1);
+  delayMicroseconds(2);
+  digitalWrite(7,0);
+  time=pulseIn(8,1);
+  distance=time*34650/(1000000*2);   //speed of sound at 25˚C is 346.3 m/s
+  Serial.println(distance);
+  if(distance<=100)
+  {
+    toll.write(180);
+	delay(1000);
+  }
+  else if(distance>100)
+  {
+    toll.write(0);
+    delay(1000);
+  }
+ 
+}
